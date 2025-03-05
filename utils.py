@@ -10,31 +10,31 @@ from scipy import stats
 import base64
 import io
 # Load dataset
-# @st.cache_data
-# def load_data():
-#     file_path = "data.xlsx"  # Ensure this path is correct
-#     xls = pd.ExcelFile(file_path)
-#     return xls.parse("Final")
-
-# data = load_data()
-
 @st.cache_data
 def load_data():
-    # Load Base64-encoded XLSX data from secrets
-    file_base64 = st.secrets["xls"]["file_base64"]
-    
-    # Decode Base64 into a BytesIO stream (mimics a file)
-    file_bytes = base64.b64decode(file_base64)
-    file_stream = io.BytesIO(file_bytes)
-
-    # Load Excel file from memory
-    xls = pd.ExcelFile(file_stream)
-    
-    # Read the specific sheet
+    file_path = "data.xlsx"  # Ensure this path is correct
+    xls = pd.ExcelFile(file_path)
     return xls.parse("Final")
 
-# Load data
 data = load_data()
+
+# @st.cache_data
+# def load_data():
+#     # Load Base64-encoded XLSX data from secrets
+#     file_base64 = st.secrets["xls"]["file_base64"]
+    
+#     # Decode Base64 into a BytesIO stream (mimics a file)
+#     file_bytes = base64.b64decode(file_base64)
+#     file_stream = io.BytesIO(file_bytes)
+
+#     # Load Excel file from memory
+#     xls = pd.ExcelFile(file_stream)
+    
+#     # Read the specific sheet
+#     return xls.parse("Final")
+
+# # Load data
+# data = load_data()
 
 
 # Data Cleaning

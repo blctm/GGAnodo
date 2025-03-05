@@ -45,27 +45,27 @@ menu = st.sidebar.radio(
 )
 
 # # Function to load dataset
-# @st.cache_data
-# def load_data():
-#     return pd.read_excel("data.xlsx", sheet_name="Final")
-
-
-#data = load_data()
-
 @st.cache_data
 def load_data():
-    # Load Base64-encoded XLSX data from secrets
-    file_base64 = st.secrets["xls"]["file_base64"]  # Use correct key
-    
-    # Decode Base64 into a BytesIO stream (mimics a file)
-    file_bytes = base64.b64decode(file_base64)
-    file_stream = io.BytesIO(file_bytes)
+    return pd.read_excel("data.xlsx", sheet_name="Final")
 
-    # Load Excel file from memory
-    return pd.read_excel(file_stream, sheet_name="Final")
 
-# Load data
 data = load_data()
+
+# @st.cache_data
+# def load_data():
+#     # Load Base64-encoded XLSX data from secrets
+#     file_base64 = st.secrets["xls"]["file_base64"]  # Use correct key
+    
+#     # Decode Base64 into a BytesIO stream (mimics a file)
+#     file_bytes = base64.b64decode(file_base64)
+#     file_stream = io.BytesIO(file_bytes)
+
+#     # Load Excel file from memory
+#     return pd.read_excel(file_stream, sheet_name="Final")
+
+# # Load data
+# data = load_data()
 
 # 🔹 Home Page
 if menu == "🏠 Home":
