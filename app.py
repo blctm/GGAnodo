@@ -24,17 +24,22 @@ def check_password():
     if not st.session_state.authenticated:
         st.sidebar.subheader("🔐 Login Required")
         password_input = st.sidebar.text_input("Enter Password:", type="password")
-        correct_password = st.secrets["app_password"]  # Load from Streamlit secrets
+
+        correct_password = st.secrets.get("app_password")
+
+        if correct_password is None:
+            st.sidebar.error("⚠️ Password is not set! Please check Streamlit Cloud settings.")
+            st.stop()
 
         if st.sidebar.button("Login"):
             if password_input == correct_password:
                 st.session_state.authenticated = True
                 st.sidebar.success("✅ Access Granted!")
-                st.experimental_rerun()  # Refresh app after login
+                st.rerun()  # 🔥 Use `st.rerun()` instead of `st.experimental_rerun()`
             else:
                 st.sidebar.error("❌ Incorrect password. Try again.")
 
-        st.stop()  # Stop execution until correct password is entered
+        st.stop()
 
 # Call password check before anything else runs
 check_password()
