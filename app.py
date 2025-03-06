@@ -15,6 +15,7 @@ from utils import (
     plot_scatter_vs_target, plot_correlation_heatmap, plot_full_correlation_heatmap
 )
 
+# 🔐 Password Protection
 def check_password():
     """Authenticate user before accessing the app."""
     if "authenticated" not in st.session_state:
@@ -23,13 +24,7 @@ def check_password():
     if not st.session_state.authenticated:
         st.sidebar.subheader("🔐 Login Required")
         password_input = st.sidebar.text_input("Enter Password:", type="password")
-
-        # ✅ Use .get() to prevent KeyError if the secret is missing
-        correct_password = st.secrets.get("app_password")
-
-        if correct_password is None:
-            st.sidebar.error("⚠️ Password is not set! Please check Streamlit Cloud settings.")
-            st.stop()  # Stop execution if no password is found
+        correct_password = st.secrets["app_password"]  # Load from Streamlit secrets
 
         if st.sidebar.button("Login"):
             if password_input == correct_password:
