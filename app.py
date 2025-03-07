@@ -15,34 +15,34 @@ from utils import (
     plot_scatter_vs_target, plot_correlation_heatmap, plot_full_correlation_heatmap
 )
 
-# # 🔐 Password Protection
-# def check_password():
-#     """Authenticate user before accessing the app."""
-#     if "authenticated" not in st.session_state:
-#         st.session_state.authenticated = False
+# 🔐 Password Protection
+def check_password():
+    """Authenticate user before accessing the app."""
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
 
-#     if not st.session_state.authenticated:
-#         st.sidebar.subheader("🔐 Login Required")
-#         password_input = st.sidebar.text_input("Enter Password:", type="password")
+    if not st.session_state.authenticated:
+        st.sidebar.subheader("🔐 Login Required")
+        password_input = st.sidebar.text_input("Enter Password:", type="password")
 
-#         correct_password = st.secrets.get("app_password")
+        correct_password = st.secrets.get("app_password")
 
-#         if correct_password is None:
-#             st.sidebar.error("⚠️ Password is not set! Please check Streamlit Cloud settings.")
-#             st.stop()
+        if correct_password is None:
+            st.sidebar.error("⚠️ Password is not set! Please check Streamlit Cloud settings.")
+            st.stop()
 
-#         if st.sidebar.button("Login"):
-#             if password_input == correct_password:
-#                 st.session_state.authenticated = True
-#                 st.sidebar.success("✅ Access Granted!")
-#                 st.rerun()  # 🔥 Use `st.rerun()` instead of `st.experimental_rerun()`
-#             else:
-#                 st.sidebar.error("❌ Incorrect password. Try again.")
+        if st.sidebar.button("Login"):
+            if password_input == correct_password:
+                st.session_state.authenticated = True
+                st.sidebar.success("✅ Access Granted!")
+                st.rerun()  # 🔥 Use `st.rerun()` instead of `st.experimental_rerun()`
+            else:
+                st.sidebar.error("❌ Incorrect password. Try again.")
 
-#         st.stop()
+        st.stop()
 
-# # Call password check before anything else runs
-# check_password()
+# Call password check before anything else runs
+check_password()
 
 # 🔹 Custom CSS for Background & Sidebar
 st.markdown(
