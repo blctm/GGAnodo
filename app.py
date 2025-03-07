@@ -103,7 +103,7 @@ if menu == "🏠 Home":
     # new_size = (int(width * 0.85), int(height * 0.85))  # Reduce size by 15%
     # resized_image = image.resize(new_size)
     # st.image(resized_image)
-    uploaded_image_path = "images/factory.png"
+    uploaded_image_path = "images/gfactory.png"
     st.image(uploaded_image_path)
 
     
