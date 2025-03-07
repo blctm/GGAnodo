@@ -15,34 +15,34 @@ from utils import (
     plot_scatter_vs_target, plot_correlation_heatmap, plot_full_correlation_heatmap
 )
 
-# 🔐 Password Protection
-def check_password():
-    """Authenticate user before accessing the app."""
-    if "authenticated" not in st.session_state:
-        st.session_state.authenticated = False
+# # 🔐 Password Protection
+# def check_password():
+#     """Authenticate user before accessing the app."""
+#     if "authenticated" not in st.session_state:
+#         st.session_state.authenticated = False
 
-    if not st.session_state.authenticated:
-        st.sidebar.subheader("🔐 Login Required")
-        password_input = st.sidebar.text_input("Enter Password:", type="password")
+#     if not st.session_state.authenticated:
+#         st.sidebar.subheader("🔐 Login Required")
+#         password_input = st.sidebar.text_input("Enter Password:", type="password")
 
-        correct_password = st.secrets.get("app_password")
+#         correct_password = st.secrets.get("app_password")
 
-        if correct_password is None:
-            st.sidebar.error("⚠️ Password is not set! Please check Streamlit Cloud settings.")
-            st.stop()
+#         if correct_password is None:
+#             st.sidebar.error("⚠️ Password is not set! Please check Streamlit Cloud settings.")
+#             st.stop()
 
-        if st.sidebar.button("Login"):
-            if password_input == correct_password:
-                st.session_state.authenticated = True
-                st.sidebar.success("✅ Access Granted!")
-                st.rerun()  # 🔥 Use `st.rerun()` instead of `st.experimental_rerun()`
-            else:
-                st.sidebar.error("❌ Incorrect password. Try again.")
+#         if st.sidebar.button("Login"):
+#             if password_input == correct_password:
+#                 st.session_state.authenticated = True
+#                 st.sidebar.success("✅ Access Granted!")
+#                 st.rerun()  # 🔥 Use `st.rerun()` instead of `st.experimental_rerun()`
+#             else:
+#                 st.sidebar.error("❌ Incorrect password. Try again.")
 
-        st.stop()
+#         st.stop()
 
-# Call password check before anything else runs
-check_password()
+# # Call password check before anything else runs
+# check_password()
 
 # 🔹 Custom CSS for Background & Sidebar
 st.markdown(
@@ -87,12 +87,27 @@ def sanitize_column_name(name):
 
 # 🔹 Page Handling
 if menu == "🏠 Home":
-    st.title("📖 Project Analysis Wiki")
-    st.write("""
-        Welcome to the project wiki! 📚  
-        Use the sidebar to navigate through different insights.
-    """)
+    st.title("📖 Anode Analysis Wiki")
 
+    # Styled welcome message
+    st.markdown(
+        "<h2 style='color: green; text-align: center;'>Welcome to the anode wiki! 📚</h2>"
+        "<h4 style='color: green; text-align: center;'>Use the sidebar to navigate through different insights.</h4>",
+        unsafe_allow_html=True
+    )
+
+    # Display image in center
+    # Load and resize the image
+    # image = Image.open("images/factory.png")
+    # width, height = image.size
+    # new_size = (int(width * 0.85), int(height * 0.85))  # Reduce size by 15%
+    # resized_image = image.resize(new_size)
+    # st.image(resized_image)
+    uploaded_image_path = "images/factory.png"
+    st.image(uploaded_image_path)
+
+    
+#overview
 elif menu == "🔍Overview":
     st.title("🔍 Overview")
     
@@ -444,26 +459,97 @@ elif menu == "📉Regression Analysis":
 
 
 elif menu == "❓Hypothesis Testing":
-    st.title("❓ Hypothesis Testing")
+    st.title("❓ Hypothesis Testing & Regression Analysis")
+    
+    # 📌 **Introduction**
+    st.markdown(
+        """
+        Statistical hypothesis testing helps determine whether **observed patterns** in the data are meaningful
+        or simply due to **random chance**. We use different techniques based on the type of data:
+        - **t-Tests & ANOVA** for comparing means.
+        - **Chi-Square Tests** for categorical relationships.
+        - **Regression Analysis** for predicting relationships between variables.
+        """
+    )
+
+        # 📌 **T-Tests & ANOVA**
     st.subheader("🔬 Group Comparison: t-Test & ANOVA")
+
+    # Select numerical & categorical variables
     target_num_var = st.selectbox("Select a Numerical Variable", numerical_cols)
     group_cat_var = st.selectbox("Select a Categorical Grouping Variable", categorical_cols)
+
     if target_num_var and group_cat_var:
+        unique_groups = cleaned_data[group_cat_var].nunique()
+
+        # ✅ Function to sanitize column names for Statsmodels
+        def sanitize_column_name(name):
+            """Replaces invalid characters to ensure compatibility with Statsmodels."""
+            return (
+                name.replace(" ", "_")   # Replace spaces with underscores
+                    .replace("%", "pct") # Replace "%" with "pct"
+                    .replace("/", "_")   # Replace "/" with "_"
+                    .replace("(", "")    # Remove "("
+                    .replace(")", "")    # Remove ")"
+                    .replace("-", "_")   # Replace "-" with "_"
+                    .replace(".", "_")   # Replace "." with "_"
+            )
+
+        # ✅ Apply sanitization to selected column names
         safe_target_var = sanitize_column_name(target_num_var)
         safe_group_var = sanitize_column_name(group_cat_var)
+
+        # ✅ Rename dataset to match new sanitized column names
         cleaned_data_renamed = cleaned_data.rename(columns={target_num_var: safe_target_var, group_cat_var: safe_group_var})
-        unique_groups = cleaned_data[group_cat_var].nunique()
+
         if unique_groups == 2:
+            # Perform t-test
             group1 = cleaned_data_renamed[cleaned_data_renamed[safe_group_var] == cleaned_data_renamed[safe_group_var].unique()[0]][safe_target_var]
             group2 = cleaned_data_renamed[cleaned_data_renamed[safe_group_var] == cleaned_data_renamed[safe_group_var].unique()[1]][safe_target_var]
             t_stat, p_value = stats.ttest_ind(group1, group2, nan_policy='omit')
             st.write(f"**T-Test Results:** t-statistic = {t_stat:.4f}, p-value = {p_value:.4f}")
         else:
+            # ✅ Fixed OLS Formula: Use cleaned variable names
             formula = f"{safe_target_var} ~ C({safe_group_var})"
             anova_result = smf.ols(formula, data=cleaned_data_renamed).fit()
             anova_table = sm.stats.anova_lm(anova_result, typ=2)
             st.write("**ANOVA Results:**")
             st.write(anova_table)
+
+        with st.expander("ℹ️ How to Interpret These Results"):
+            st.markdown("""
+            - **p-value < 0.05** → **Statistically significant difference** between groups.
+            - **p-value ≥ 0.05** → No strong evidence of a real difference.
+            """)
+
+        # 📌 Boxplot Visualization
+        fig, ax = plt.subplots(figsize=(7, 5))
+        sns.boxplot(x=cleaned_data_renamed[safe_group_var], y=cleaned_data_renamed[safe_target_var], palette="coolwarm", ax=ax)
+        ax.set_title(f"{target_num_var} Distribution by {group_cat_var}")
+        st.pyplot(fig)
+
+    # 📌 **Chi-Square Test**
+    st.subheader("📊 Chi-Square Test for Categorical Data")
+
+    cat_var1 = st.selectbox("Select First Categorical Variable", categorical_cols)
+    cat_var2 = st.selectbox("Select Second Categorical Variable", categorical_cols)
+
+    if cat_var1 and cat_var2:
+        contingency_table = pd.crosstab(cleaned_data[cat_var1], cleaned_data[cat_var2])
+        chi2_stat, p_value, dof, expected = stats.chi2_contingency(contingency_table)
+        st.write(f"**Chi-Square Test Results:** Chi2 = {chi2_stat:.4f}, p-value = {p_value:.4f}")
+    
+        with st.expander("ℹ️ How to Interpret This Test"):
+            st.markdown("""
+            - **p-value < 0.05** → The two variables are **related**.
+            - **p-value ≥ 0.05** → No significant relationship.
+            """)
+        # 📌 Bar Chart Visualization
+        fig, ax = plt.subplots(figsize=(7, 5))
+        contingency_table.plot(kind='bar', stacked=True, colormap='coolwarm', ax=ax)
+        ax.set_title(f"{cat_var1} vs. {cat_var2}")
+        st.pyplot(fig)
+        
 
 elif menu == "📊Correlation Matrix":
     st.title("📊 Correlation Matrix")
