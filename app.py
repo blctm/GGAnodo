@@ -558,6 +558,20 @@ elif menu == "📊Correlation Matrix":
     st.subheader("📈 Full Feature Correlation Heatmap")
     plot_full_correlation_heatmap(cleaned_data)
 
+    # 📌 Explanation (Collapsible)
+        with st.expander("ℹ️ Understanding the Heatmap"):
+            st.markdown("""
+            - This **heatmap visualizes the correlation** between features in the production process.  
+            - **Values range from -1 to +1**:  
+              - **+1 (Red)** → Strong **positive** correlation (Both features increase together).  
+              - **-1 (Blue)** → Strong **negative** correlation (One increases while the other decreases).  
+              - **0 (White)** → No correlation.  
+            - **Why is this useful?**  
+              - Helps identify **critical process dependencies**.  
+              - Determines which **factors strongly influence Dry Thickness & Active Material Loading (AML)**.  
+              - Detects **variables that can be adjusted together or need isolation**.  
+            """)
+
 # 🔬 **Deep Dive: Key Correlation Insights**
     st.subheader("🔬 Key Insights from Correlation Analysis")
 
