@@ -558,6 +558,52 @@ elif menu == "📊Correlation Matrix":
     st.subheader("📈 Full Feature Correlation Heatmap")
     plot_full_correlation_heatmap(cleaned_data)
 
+# 🔬 **Deep Dive: Key Correlation Insights**
+    st.subheader("🔬 Key Insights from Correlation Analysis")
+
+    # 🔹 **Strong Positive Relationships**
+    with st.expander("✅ Strong Positive Correlations"):
+        st.write("""
+        - **Vacuum Pressure & Vacuum Temperature (~1.00)**  
+          - Changes in vacuum pressure are **directly linked** to vacuum temperature.
+          - Implication: These **must be adjusted together** to maintain process stability.
+        
+        - **Dry Thickness & Doctor Blade Gap (~0.72)**  
+          - A **wider doctor blade gap leads to greater thickness**.
+          - Implication: **Doctor Blade settings should be precisely controlled** to maintain thickness targets.
+        
+        - **Mixing Speed & Time in Individual Steps (e.g., STEP 4 Speed & Time ~0.85)**  
+          - Higher speeds **are usually paired** with longer times in the same step.
+          - Implication: **Mixing adjustments should account for both speed & time to maintain consistency.**
+        """)
+
+    # 🔹 **Strong Negative Relationships**
+    with st.expander("⚠️ Strong Negative Correlations"):
+        st.write("""
+        - **Vacuum Pressure & Vacuum Time (~ -0.98)**  
+          - Higher vacuum pressure **reduces the required vacuum time**.
+          - Implication: **Increasing vacuum pressure shortens process time** but may impact quality.
+
+        - **Vacuum Temperature & Vacuum Time (~ -0.90)**  
+          - Higher temperatures **lead to shorter vacuum times**.
+          - Implication: **Optimizing vacuum temp & time can balance efficiency & material properties**.
+        """)
+
+    # 🔹 **Clustered Relationships**
+    with st.expander("📊 Grouped Parameter Relationships"):
+        st.write("""
+        - **Vacuum Parameters (Pressure, Temperature, & Time)**
+          - Highly correlated **(+0.98 to +1.00)** → These **must be adjusted together** for stability.
+        
+        - **Mixing Process Variables (Speeds & Times)**
+          - Correlate **within the same step** and **partially across steps**.
+          - Implication: **Mixing adjustments should be analyzed per step rather than across steps.**
+        
+        - **Independent Variables**
+          - **Drying Temperature & Time**: **Weak correlations** with other parameters → **independently controlled**.
+          - **Solid Content (SC weight%)**: Generally weak correlations → **not a dominant factor**.
+        """)
+
 
 elif menu == "🔍Reverse Engineer OLS":
     st.title("🔍Reverse Engineering OLS Predictions")
