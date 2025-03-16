@@ -87,7 +87,7 @@ def sanitize_column_name(name):
 
 # 🔹 Page Handling
 if menu == "🏠 Home":
-    st.title("📖 Anode Analysis Wiki")
+    st.title("📖 Anode Analysis")
 
     # Styled welcome message
     st.markdown(
