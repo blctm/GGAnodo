@@ -91,7 +91,7 @@ if menu == "🏠 Home":
 
     # Styled welcome message
     st.markdown(
-        "<h2 style='color: green; text-align: center;'>Welcome to the anode wiki! 📚</h2>"
+        "<h2 style='color: green; text-align: center;'>Welcome to The Anode Predictive System! 📚</h2>"
         "<h4 style='color: green; text-align: center;'>Use the sidebar to navigate through different insights.</h4>",
         unsafe_allow_html=True
     )
